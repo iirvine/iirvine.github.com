@@ -4,7 +4,7 @@
   <title><![CDATA[¡ Que Vaya !]]></title>
   <link href="http://iirvine.github.com/atom.xml" rel="self"/>
   <link href="http://iirvine.github.com/"/>
-  <updated>2012-07-22T17:26:25-06:00</updated>
+  <updated>2012-07-22T17:30:42-06:00</updated>
   <id>http://iirvine.github.com/</id>
   <author>
     <name><![CDATA[iirvine]]></name>
@@ -12,5 +12,16 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[hello world]]></title>
+    <link href="http://iirvine.github.com/blog/2012/07/22/hello-world/"/>
+    <updated>2012-07-22T17:28:00-06:00</updated>
+    <id>http://iirvine.github.com/blog/2012/07/22/hello-world</id>
+    <content type="html"><![CDATA[<p>Testing testing&#8230;</p>
+
+<p>Is this thing on?</p>
+]]></content>
+  </entry>
   
 </feed>
