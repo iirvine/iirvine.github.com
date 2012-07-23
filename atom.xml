@@ -4,7 +4,7 @@
   <title><![CDATA[¡ Que Vaya !]]></title>
   <link href="http://iirvine.github.com/atom.xml" rel="self"/>
   <link href="http://iirvine.github.com/"/>
-  <updated>2012-07-22T17:30:42-06:00</updated>
+  <updated>2012-07-22T18:21:57-06:00</updated>
   <id>http://iirvine.github.com/</id>
   <author>
     <name><![CDATA[iirvine]]></name>
@@ -12,6 +12,67 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[obligatory octopress metablog post]]></title>
+    <link href="http://iirvine.github.com/blog/2012/07/22/obligatory-octopress-metablog-post/"/>
+    <updated>2012-07-22T18:04:00-06:00</updated>
+    <id>http://iirvine.github.com/blog/2012/07/22/obligatory-octopress-metablog-post</id>
+    <content type="html"><![CDATA[<h3>Octopress, YAY.</h3>
+
+<p>Keeping with the tradition of using one of your first posts on your new Octopress blog to blog about how you set up your new Octopress blog, here are some notes.</p>
+
+<p>I&#8217;ve had to do this twice now, both times with some small amount of goofiness, but all in all quite an untroubled installation, considering I know nothing about Jekyll/Ruby and am not git&#8217;s most favorite person in the world. These were my general steps for getting things up and running on a span brankin&#8217; new MacBook Air.</p>
+
+<p>First, install git. Self explanatory, really. Although I did run into some funny business installing Git manually vs through <a href="http://mxcl.github.com/homebrew/">Homebrew</a>, vs some older version that was installed when I downloaded XCode - generally, I&#8217;d recommend just saving yourself some trouble and getting it from Homebrew to begin with.</p>
+
+<p>As an aside: in switching to a new, more professionally aliased GitHub account, git had something of a tantrum and was having difficulty letting go of my old user name. I changed the global git config, which did absolutely nothing. Finally I deleted my old ssh keys, generated new ones, and ran ssh-add, and that seemed to do the trick, so git is off my shit list - <em>for now</em>.</p>
+
+<p>Next was installing <a href="https://github.com/sstephenson/rbenv#section_2">rbenv</a> and <a href="https://github.com/sstephenson/ruby-build">ruby-build</a>. Again, Homebrew to the rescue here. They both installed with pretty much no hassle.</p>
+
+<p>Of note was that I went with rbenv instead of rvm because it seems the latter has fallen out of favor as of late, at least that&#8217;s what I inferred from <a href="https://twitter.com/octopress/status/219423650477129728">this</a> tweet.</p>
+
+<p>Next is setting up your repo on GitHub. If you&#8217;re starting a user site, don&#8217;t do what I did and spend an hour trying to figure out why your repo called &#8220;username&#8221; isn&#8217;t building a proper Github page and is messing up all of Octopress&#8217; rake tasks and generally nothing is working - make a repo named &#8220;username.github.com&#8221;, like you&#8217;re supposed to, otherwise, you&#8217;ll feel really dumb.</p>
+
+<p>Now you&#8217;ll setup your local directory, ie, some folder on your machine called &#8220;MyAwesomeBlog&#8221; - then use rbenv to set the local ruby version to Octopress&#8217; preferred flavor, the esoterically named &#8220;1.9.2-p290&#8221;:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rbenv local 1.9.2-p290</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&#8217;ll probably tell you that it&#8217;s not been installed yet, silly, which you can do with</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rbenv install 1.9.2-p290 </span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can check that all is well in ruby-land with</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rbenv local</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Okay, now comes the fun stuff. &#8220;Install&#8221; Octopress by cloning it into the local directory you&#8217;ll be using to house your blog, ie</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/imathis/octopress.git MyAwesomeBlog/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All done? Get those delicious dependencies with bundler!</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>gem install bundler #if you've not installed it already
+</span><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From this point, it&#8217;s pretty much smooth sailing. Work your way through the <a href="http://octopress.org/docs/">documentation</a>, use the super convenient rake tasks to install the default theme and setup github pages…</p>
+
+<p>Then do a rake generate! Then a rake deploy! Then browse to username.github.com and <em>gaze</em> upon the splendidness of the base, unadorned octopress theme! Then do a happy dance, because everything is working splendidly, and you are obviously splendid, etc etc. (I recommend playing <a href="http://www.youtube.com/watch?v=mwrbOEaJPBY">this song</a> for this part).</p>
+
+<p>Then install a new theme, because rolling with a basic, untouched octopress design is like, so 2011. Update your _config.yml with your name and super clever title and BOOM. You&#8217;re pretty much good to go.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[hello world]]></title>
