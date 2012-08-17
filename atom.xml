@@ -4,7 +4,7 @@
   <title><![CDATA[¡ Que Vaya !]]></title>
   <link href="http://iirvine.github.com/atom.xml" rel="self"/>
   <link href="http://iirvine.github.com/"/>
-  <updated>2012-07-25T18:28:14-06:00</updated>
+  <updated>2012-08-16T18:06:34-06:00</updated>
   <id>http://iirvine.github.com/</id>
   <author>
     <name><![CDATA[iirvine]]></name>
@@ -12,6 +12,114 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[LINQ Learning - Implement the Where Operator]]></title>
+    <link href="http://iirvine.github.com/blog/2012/08/16/linq-learning-implement-the-where-operator/"/>
+    <updated>2012-08-16T17:51:00-06:00</updated>
+    <id>http://iirvine.github.com/blog/2012/08/16/linq-learning-implement-the-where-operator</id>
+    <content type="html"><![CDATA[<p>I answered a question on StackOverflow a few weeks back with a walkthrough showing how to implement the Where operator yourself, using the language features LINQ is built on.</p>
+
+<p>I&#8217;m certain I stole this example from somewhere but nevertheless, I&#8217;ve used it a couple times to help reduce some of the magical aspects of LINQ for new developers and I like it quite a lot, so I thought I&#8217;d post it here for posterity/eventual cleanup and detail. I leave out quite a bit in this version that could be expanded on, like exactly what &#8220;yield return&#8221; is doing in the final implementation - I may come back and fill that in when I find the time.</p>
+
+<p>Say we&#8217;ve got an array of Things, and we want to write a method to help us figure out which of those Things are awesome. Here&#8217;s one way we could do it:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="k">static</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Thing</span><span class="p">&gt;</span> <span class="n">ThingsThatAreAwesome</span><span class="p">(</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">Thing</span><span class="p">&gt;</span> <span class="n">things</span><span class="p">){</span>
+</span><span class='line'>    <span class="n">List</span><span class="p">&lt;</span><span class="n">Thing</span><span class="p">&gt;</span> <span class="n">ret</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">foreach</span> <span class="p">(</span><span class="n">Thing</span> <span class="n">thing</span> <span class="k">in</span> <span class="n">things</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">thing</span><span class="p">.</span><span class="n">IsAwesome</span><span class="p">)</span>
+</span><span class='line'>            <span class="n">ret</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">thing</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Which we would then call like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="n">List</span><span class="p">&lt;</span><span class="n">Thing</span><span class="p">&gt;</span> <span class="n">myThings</span><span class="p">;</span>
+</span><span class='line'><span class="n">List</span><span class="p">&lt;</span><span class="n">Thing</span><span class="p">&gt;</span> <span class="n">myAwesomeThings</span> <span class="p">=</span> <span class="n">ThingsThatAreAwesome</span><span class="p">(</span><span class="n">myThings</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So that&#8217;s pretty keen. We&#8217;re just iterating over our list of things, seeing which of them are awesome, and then returning the ones that meet our awesome criteria. But semantically it doesn&#8217;t really do it for us - our awesome filter is so awesome that we want to be able to just walk up to a list of Things and call our operator on it, as if it were an instance method on IEnumerable itself.</p>
+
+<p>And so that&#8217;s where <em>extension methods</em> come in. Through some compiler trickery, they give us the ability to &#8220;extend&#8221; types. So like you said, by putting &#8220;this&#8221; in front of the IEnumerable parameter of our method, we can now walk up to our list of things and ask it to filter itself like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="n">List</span><span class="p">&lt;</span><span class="n">Thing</span><span class="p">&gt;</span> <span class="n">myAwesomeThings</span> <span class="p">=</span> <span class="n">myThings</span><span class="p">.</span><span class="n">ThingsThatAreAwesome</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So - that&#8217;s where extension methods fit in. Next is the &#8220;predicate&#8221;.</p>
+
+<p>So we&#8217;ve got our magnificent, awesome filter, and it&#8217;s great, but then we have a brain explosion: with a little bit of abstraction, that method we just wrote could be used to filter <em>anything</em>. Not just lists of Thing objects, and not just filtering on things that are awesome.</p>
+
+<p>Making it work with any type is fairly easy, we just make it a generic operator with <code>IEnumerable&lt;T&gt;</code>, rather than <code>IEnumerable&lt;Thing&gt;</code> - but making it filter on any criteria is trickier. How is the method supposed to know how to filter any type? It obviously can&#8217;t - our calling code will have to <em>tell</em> it exactly what we mean by &#8220;filter&#8221; - what kind of filter we want. And so we give it a second parameter, a function pointer, that expresses just what we&#8217;re after. We&#8217;ll call that our &#8220;predicate&#8221;, which is just a way of saying a chunk of code that returns true or false. When all is said and done, it looks a little like this. We&#8217;ll rename the method to &#8220;Filter&#8221;, since that better expresses what we&#8217;re going for now:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="k">static</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">Filter</span><span class="p">(</span><span class="k">this</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">list</span><span class="p">,</span> <span class="n">Func</span><span class="p">&lt;</span><span class="n">T</span><span class="p">,</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">predicate</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">foreach</span> <span class="p">(</span><span class="n">T</span> <span class="n">item</span> <span class="k">in</span> <span class="n">list</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">predicate</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+</span><span class='line'>            <span class="k">yield</span> <span class="k">return</span> <span class="n">item</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can see that we&#8217;re not really doing anything different from our Awesome filter method before - we&#8217;re still just iterating over a list, performing some kind of check, and returning the items that pass that check. But we&#8217;ve given ourselves a way for calling code to express exactly what that &#8220;check&#8221; should be.</p>
+
+<p>We&#8217;re basically still only doing two things: iterating over a list, and running <em>some kind of check</em> over every item in that list - the items that pass the check get passed back. Except now the method doesn&#8217;t really know what the check it&#8217;s running looks like - we are telling it, passing that piece of code in as a parameter, our predicate, rather than hard coding it into the method itself. We leave it up to the caller to decide what they want their filtering criteria to be.</p>
+
+<p>So at this point, we&#8217;ve basically got the LINQ Where operator - we can now run queries over any type of collection, all with the same method. If you&#8217;ve not messed around with lambdas yet, don&#8217;t worry about it - just know it&#8217;s a very succinct way of expressing a bit of code, which in this case is telling our filter method what we want to filter on:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='c#'><span class='line'><span class="n">List</span><span class="p">&lt;</span><span class="n">Thing</span><span class="p">&gt;</span> <span class="n">myThings</span><span class="p">;</span>
+</span><span class='line'><span class="n">List</span><span class="p">&lt;</span><span class="n">Cats</span><span class="p">&gt;</span>  <span class="n">myCats</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">var</span> <span class="n">myAwesomeThings</span> <span class="p">=</span> <span class="n">myThings</span><span class="p">.</span><span class="n">Filter</span><span class="p">(</span><span class="n">thing</span> <span class="p">=&gt;</span> <span class="n">thing</span><span class="p">.</span><span class="n">IsAwesome</span><span class="p">);</span>
+</span><span class='line'><span class="kt">var</span> <span class="n">myCrazyCats</span> <span class="p">=</span> <span class="n">myCats</span><span class="p">.</span><span class="n">Filter</span><span class="p">(</span><span class="n">cat</span> <span class="p">=&gt;</span> <span class="n">cat</span><span class="p">.</span><span class="n">IsCrazy</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">thing</span> <span class="k">in</span> <span class="n">myAwesomeThings</span><span class="p">){</span>
+</span><span class='line'>    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;This thing is awesome! {0}&quot;</span><span class="p">,</span> <span class="n">thing</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">cat</span> <span class="k">in</span> <span class="n">myCrazyCats</span><span class="p">){</span>
+</span><span class='line'>    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;This cat is crazy! {0}&quot;</span><span class="p">,</span> <span class="n">cat</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[obligatory octopress metablog post]]></title>

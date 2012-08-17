@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>¡ Que Vaya !</title>
+	<title>LINQ Learning - Implement the Where Operator - ¡ Que Vaya !</title>
 	<meta name="author" content="iirvine">
 
 	
@@ -70,13 +70,9 @@
 </nav>
 
 </header>
-	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2012/08/16/linq-learning-implement-the-where-operator/">LINQ Learning - Implement the Where Operator</a></h1>
-	<div class="entry-content">
-		<p>I answered a question on StackOverflow a few weeks back with a walkthrough showing how to implement the Where operator yourself, using the language features LINQ is built on.</p>
+	<div id="content" class="inner"><article class="post">
+	<h1 class="title">LINQ Learning - Implement the Where Operator</h1>
+	<div class="entry-content"><p>I answered a question on StackOverflow a few weeks back with a walkthrough showing how to implement the Where operator yourself, using the language features LINQ is built on.</p>
 
 <p>I&#8217;m certain I stole this example from somewhere but nevertheless, I&#8217;ve used it a couple times to help reduce some of the magical aspects of LINQ for new developers and I like it quite a lot, so I thought I&#8217;d post it here for posterity/eventual cleanup and detail. I leave out quite a bit in this version that could be expanded on, like exactly what &#8220;yield return&#8221; is doing in the final implementation - I may come back and fill that in when I find the time.</p>
 
@@ -176,10 +172,7 @@
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-		
-		
-	</div>
+</div>
 
 
 <div class="meta">
@@ -202,127 +195,20 @@
 	
 </div></article>
 
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2012/07/22/obligatory-octopress-metablog-post/">Obligatory Octopress Metablog Post</a></h1>
-	<div class="entry-content">
-		<h3>Octopress, YAY.</h3>
-
-<p>Keeping with the tradition of using one of your first posts on your new Octopress blog to blog about how you set up your new Octopress blog, here are some notes.</p>
-
-<p>I&#8217;ve had to do this twice now, both times with some small amount of goofiness, but all in all quite an untroubled installation, considering I know nothing about Jekyll/Ruby and am not git&#8217;s most favorite person in the world. These were my general steps for getting things up and running on a span brankin&#8217; new MacBook Air.</p>
-
-<p>First, install git. Self explanatory, really. Although I did run into some funny business installing Git manually vs through <a href="http://mxcl.github.com/homebrew/">Homebrew</a>, vs some older version that was installed when I downloaded XCode - generally, I&#8217;d recommend just saving yourself some trouble and getting it from Homebrew to begin with.</p>
-
-<p>As an aside: in switching to a new, more professionally aliased GitHub account, git had something of a tantrum and was having difficulty letting go of my old user name. I changed the global git config, which did absolutely nothing. Finally I deleted my old ssh keys, generated new ones, and ran ssh-add, and that seemed to do the trick, so git is off my shit list - <em>for now</em>.</p>
-
-<p>Next was installing <a href="https://github.com/sstephenson/rbenv#section_2">rbenv</a> and <a href="https://github.com/sstephenson/ruby-build">ruby-build</a>. Again, Homebrew to the rescue here. They both installed with pretty much no hassle.</p>
-
-<p>Of note was that I went with rbenv instead of rvm because it seems the latter has fallen out of favor as of late, at least that&#8217;s what I inferred from <a href="https://twitter.com/octopress/status/219423650477129728">this</a> tweet.</p>
-
-<p>Next is setting up your repo on GitHub. If you&#8217;re starting a user site, don&#8217;t do what I did and spend an hour trying to figure out why your repo called &#8220;username&#8221; isn&#8217;t building a proper Github page and is messing up all of Octopress&#8217; rake tasks and generally nothing is working - make a repo named &#8220;username.github.com&#8221;, like you&#8217;re supposed to, otherwise, you&#8217;ll feel really dumb.</p>
-
-<p>Now you&#8217;ll setup your local directory, ie, some folder on your machine called &#8220;MyAwesomeBlog&#8221; - then use rbenv to set the local ruby version to Octopress&#8217; preferred flavor, the esoterically named &#8220;1.9.2-p290&#8221;:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rbenv local 1.9.2-p290</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It&#8217;ll probably tell you that it&#8217;s not been installed yet, silly, which you can do with</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rbenv install 1.9.2-p290 </span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can check that all is well in ruby-land with</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rbenv local</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Okay, now comes the fun stuff. &#8220;Install&#8221; Octopress by cloning it into the local directory you&#8217;ll be using to house your blog, ie</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git clone git://github.com/imathis/octopress.git MyAwesomeBlog/</span></code></pre></td></tr></table></div></figure>
-
-
-<p>All done? Get those delicious dependencies with bundler!</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gem install bundler #if you've not installed it already
-</span><span class='line'>bundle install</span></code></pre></td></tr></table></div></figure>
-
-
-<p>From this point, it&#8217;s pretty much smooth sailing. Work your way through the <a href="http://octopress.org/docs/">documentation</a>, use the super convenient rake tasks to install the default theme and setup github pages…</p>
-
-<p>Then do a rake generate! Then a rake deploy! Then browse to username.github.com and <em>gaze</em> upon the splendidness of the base, unadorned octopress theme! Then do a happy dance, because everything is working splendidly, and you are obviously splendid, etc etc. (I recommend playing <a href="http://www.youtube.com/watch?v=mwrbOEaJPBY">this song</a> for this part).</p>
-
-<p>Then install a new theme, because rolling with a basic, untouched octopress design is like, so 2011. Update your _config.yml with your name and super clever title and BOOM. You&#8217;re pretty much good to go.</p>
-
-		
-		
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+	
+	
+	<a class="addthis_button_tweet"></a>
+	
+	
+	<a class="addthis_counter addthis_pill_style"></a>
 	</div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid="></script>
+</div>
 
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-22T18:04:00-06:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2012</time></div>
-	<div class="tags">
 
 </div>
-	
-</div></article>
-
-
-    <article class="post">
-	<h1 class="title"><a href="/blog/2012/07/22/hello-world/">Hello World</a></h1>
-	<div class="entry-content">
-		<p>Testing testing&#8230;</p>
-
-<p>Is this thing on?</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-07-22T17:28:00-06:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2012</time></div>
-	<div class="tags">
-
-</div>
-	
-</div></article>
-
-<nav id="pagenavi">
-    
-    
-    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
-</nav></div>
 	<footer id="footer" class="inner">Copyright &copy; 2012
 
     iirvine
