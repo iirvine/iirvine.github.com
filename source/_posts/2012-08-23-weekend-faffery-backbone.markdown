@@ -6,7 +6,7 @@ comments: true
 categories: [backbone, leaflet, instagram, faffery]
 ---
 ##Backbone+Leaflet+Instagram = Instamapstagram
-<iframe width="640" height='500' src="http://iirvine.github.com/instamapstagram/index.html" frameborder="0"></iframe>
+<iframe style="display: block;margin: 0 auto;" width="640" height='500' src="http://iirvine.github.com/instamapstagram/index.html" frameborder="0"></iframe>
 
 As part of a weekend-long "clear out the cobwebs" dive back into backbone, I threw together a little sample app to plot Instagram photos on a map. 
 
